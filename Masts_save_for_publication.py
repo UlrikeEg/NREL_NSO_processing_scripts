@@ -48,9 +48,9 @@ years   =  np.arange(2021,2024)   #
 months  =  np.arange(1,13)   # 
 days    =  np.arange(1,32)   # 
 
-years   =  [2023] #
-months  =  [1,2,3,4] # 
-days    =  np.arange(1,32)   #[28] # 
+# years   =  [2023] #
+# months  =  [1,2,3,4] # 
+# days    =  np.arange(1,32)   #[28] # 
 
 
 
@@ -405,74 +405,7 @@ for year in years:
             
             
              
-                  
-            # ## Pickle files (for size comparison)
-            # inflow.to_pickle(publication_path + 'Inflow_Mast_20Hz_{}_{}h_to_{}_{}h.pkl'.format(inflow.index[0].date(),inflow.index[0].hour, inflow.index[-1].date(),inflow.index[-1].hour))
-            # inflow_1min.to_pickle(publication_path + 'Inflow_Mast_{}_{}_{}h_to_{}_{}h.pkl'.format(res_freq, inflow.index[0].date(),inflow.index[0].hour, inflow.index[-1].date(),inflow.index[-1].hour))  
-            # masts.to_pickle(publication_path + 'Wake_Masts_20Hz_{}_{}h_to_{}_{}h.pkl'.format(masts.index[0].date(),masts.index[0].hour, masts.index[-1].date(),masts.index[-1].hour))
-            # masts_1min.to_pickle(publication_path + 'Wake_Masts_{}_{}_{}h_to_{}_{}h.pkl'.format(res_freq, masts.index[0].date(),masts.index[0].hour, masts.index[-1].date(),masts.index[-1].hour))
-           
-      
-            # # Netcdf (for file size comparison)
-            # if len(masts) !=0: 
-            #     dfs = [inflow, inflow_1min, masts, masts_1min]   # 
-            #     names = ["Inflow_Mast_20Hz", "Inflow_Mast_1min", "Wake_Masts_20Hz", "Wake_Masts_1min"]
-            # else:
-            #     dfs = [inflow, inflow_1min]   # 
-            #     names = ["Inflow_Mast_20Hz", "Inflow_Mast_1min"]  
-                
-                
-            # for df, name in zip(dfs, names):
-            
-            #     try: xr.close()  
-            #     except: pass
 
-            #     xr = xarray.Dataset.from_dataframe(df)
-            #     xr.attrs = {'creation_date':pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"), 'author':'Ulrike Egerer'}
-                
-            #     try:
-            #         xr['RH'].attrs={'units':'%'}
-            #         xr['p'].attrs={'units':'hPa'}
-            #         xr['H_S'].attrs={'units':'W/m2'}
-            #         xr['Tau'].attrs={'units':'kg m/s'}
-            #         xr['R_f'].attrs={'units':'-'}
-            #     except:
-            #         pass
-                
-            #     for col in list(df.filter(regex='wspd')):
-            #         xr[col].attrs={'units':'m/s'}
-            #     for col in list(df.filter(regex='u_')):
-            #         xr[col].attrs={'units':'m/s'}
-            #     for col in list(df.filter(regex='v_')):
-            #         xr[col].attrs={'units':'m/s'}
-            #     for col in list(df.filter(regex='w_')):
-            #         xr[col].attrs={'units':'m/s'}                        
-                    
-            #     for col in list(df.filter(regex='Temp')):
-            #         xr[col].attrs={'units':'degC'}
-            #     for col in list(df.filter(regex='Ts')):
-            #         xr[col].attrs={'units':'degC'}
-            #     for col in list(df.filter(regex='wdir')):
-            #         xr[col].attrs={'units':'deg from North'}
-            #     for col in list(df.filter(regex='TKE')):
-            #         xr[col].attrs={'units':'m2/s2'}       
-            #     for col in list(df.filter(regex='TI')):
-            #         xr[col].attrs={'units':'-'}
-            #     for col in list(df.filter(regex='ls')):
-            #         xr[col].attrs={'units':'m'}
-            #     for col in list(df.filter(regex='Ri_b')):
-            #         xr[col].attrs={'units':'-'}                     
-
-            #     #xr.info()
-            #     xr.to_netcdf(publication_path + name+'_{}_{}h_to_{}_{}h.nc'.format(df.index[0].date(),df.index[0].hour, df.index[-1].date(),df.index[-1].hour))
-            #     xr.close()  
-
-            
-            # read: 
-            # test = xarray.open_dataset('../data_publish/Inflow_Mast_20Hz_{}_{}h_to_{}_{}h.nc'.
-            #                            format(inflow.index[0].date(),inflow.index[0].hour, inflow.index[-1].date(),inflow.index[-1].hour))
-            # test.to_dataframe()
-                    
        
             
            
