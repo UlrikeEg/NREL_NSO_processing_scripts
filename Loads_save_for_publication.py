@@ -87,7 +87,7 @@ for year in years:
                 continue    
 
             ## Make data from   00:00 UTC to 24:00UTC  
-            start = pd.to_datetime(str(loads.index[0].date())) +   pd.to_timedelta(1,"D")
+            start = pd.to_datetime(str(year) + f'{month:02d}' + f'{day:02d}').date() +   pd.to_timedelta(1,"D")  # pd.to_datetime(str(loads.index[0].date())) +   pd.to_timedelta(1,"D")
             end = start +   pd.to_timedelta(1,"D")    
             
             loads = loads[start:end]   
