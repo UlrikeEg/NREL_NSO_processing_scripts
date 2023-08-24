@@ -15,13 +15,6 @@ lidar_path =       'Y:\Wind-data/Restricted/Projects/NSO/Lidar_Data/'
 turbulence_path =  'Y:\Wind-data/Restricted/Projects/NSO/Lidar_Turbulence/'    
 publication_path = 'Y:\Wind-data/Restricted/Projects/NSO/Data_publish/NSO/lidar/'  
 
-years   =  [2022]   # np.arange(2022,2024)   #
-months  =  [6,7,8,9]
-days    =  np.arange(1,32)   # 
-
-# years   =  [2022] #
-# months  =  [6] # 
-# days    =  [10] # 
 
 
 save  = 1
@@ -112,6 +105,16 @@ def save_processed_lidar_data(lidar, complete_path):
 
 print ("Processing 360 degree scans...")
 
+
+years   =  [2022]   # np.arange(2022,2024)   #
+months  =  [6,7,8,9]
+days    =  np.arange(1,32)   # 
+
+# years   =  [2022] #
+# months  =  [6] # 
+# days    =  [10] # 
+
+
 for year in years:
     year = str(year)
 
@@ -194,7 +197,7 @@ for turbulence_daily_file in turbulence_daily_files:
 
         lidar = prep_lidar_data(lidar) 
         
-        print (lidar.index[0])
+        #  print (lidar.index[0])
 
         
         if plot == 1:
