@@ -103,12 +103,12 @@ def save_processed_lidar_data(lidar, complete_path):
 
 #%% Process 360 degree scans           
 
-print ("Processing 360 degree scans...")
+print ("Processing 360 degree scans June - Sept 2022 ...")
 
 
-years   =  [2022]   # np.arange(2022,2024)   #
+years   =  [2022]   
 months  =  [6,7,8,9]
-days    =  np.arange(1,32)   # 
+days    =  np.arange(1,32)   
 
 # years   =  [2022] #
 # months  =  [6] # 
