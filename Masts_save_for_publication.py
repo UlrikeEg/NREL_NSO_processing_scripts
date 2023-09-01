@@ -42,17 +42,15 @@ from Functions_general import *
 path = 'Y:\Wind-data/Restricted/Projects/NSO/Processed_data/Met_masts_v0/'    
 flux_path = 'Y:\Wind-data/Restricted/Projects/NSO/Processed_data/Met_masts_v0/'
 
-publication_path = 'Y:\Wind-data/Restricted/Projects/NSO/Data_publish/NSO/met_masts/'  # '../published_data/NSO/met_masts/' #
+publication_path = 'Y:\Wind-data/Restricted/Projects/NSO/Data_publish/NSO/'  
 
 years   =  np.arange(2021,2024)   # 
 months  =  np.arange(1,13)   # 
 days    =  np.arange(1,32)   # 
 
-# years   =  [2023] #
-# months  =  [1,2,3,4] # 
-# days    =  np.arange(1,32)   #[28] # 
-
-
+# years   =  [2021] #
+# months  =  [12] # 
+# days    =  [15]  # 
 
 
 save  = 1
@@ -162,10 +160,10 @@ for year in years:
                 
                 for column in masts.drop(masts.filter(regex='flag').columns,axis=1).columns:  #   exclude flag columns
                     index_double_value = masts[column].dropna().diff()== 0
-                    masts[column] = masts[column].where(index_double_value==False)            
-                
-          
-            
+                    masts[column] = masts[column].where(index_double_value==False) 
+                    
+            # drop some unphysical values
+            inflow.H_S = inflow.H_S.where(inflow.H_S >-150)
 
             ### Resample all Sonic data to 1 min data
             res_freq = '1min'
@@ -226,7 +224,61 @@ for year in years:
     
                     # round to 3 digits
                     df = df.round(3)  
+                    
+                    
+                    
+            ## Complete columns (fill empty columns with NaNs) and bring in right order
+
+            # Inflow 20Hz
+            all_inflow_cols = ['u_7m', 'v_7m', 'w_7m', 'Ts_7m', 'wdir_7m', 'wspd_7m', 'TKE_7m', 'TI_U_7m', 'TI_w_7m', 'ls_w_7m', 'ls_U_7m', 
+                               'u_5m', 'v_5m', 'w_5m', 'Ts_5m', 'wdir_5m', 'wspd_5m', 'TKE_5m', 'TI_U_5m', 'TI_w_5m', 'ls_w_5m', 'ls_U_5m',
+                               'u_3m', 'v_3m', 'w_3m', 'Ts_3m' ,'wdir_3m', 'wspd_3m', 'TKE_3m', 'TI_U_3m', 'TI_w_3m', 'ls_w_3m', 'ls_U_3m', 
+                               'wspd_15m', 'Temp_2m',  'Temp_7m', 'Temp_3m', 'RH', 'p', 
+                               'Ri_b', 'H_S', 'Tau', 'R_f']            
+            cols_to_add = [col for col in all_inflow_cols if col not in inflow.columns]
+            inflow.loc[:, cols_to_add] = np.nan
+            inflow = inflow[all_inflow_cols]
+            # Inflow 1min
+            all_inflow_1min_cols = all_inflow_cols + [ 'wspd_7m_max', 'wspd_7m_std', 'wspd_5m_max', 'wspd_5m_std', 'wspd_3m_max', 'wspd_3m_std']          
+            cols_to_add = [col for col in all_inflow_1min_cols if col not in inflow_1min.columns]
+            inflow_1min.loc[:, cols_to_add] = np.nan
+            inflow_1min = inflow_1min[all_inflow_1min_cols]  
             
+            
+            if len(masts) !=0: 
+                # Masts 20Hz
+                all_masts_cols = [  'm1_u_7m','m1_v_7m', 'm1_w_7m', 'm1_Ts_7m', 'm1_wdir_7m', 'm1_wspd_7m', 'm1_TKE_7m', 'm1_TI_U_7m', 'm1_TI_w_7m', 'm1_ls_w_7m', 'm1_ls_U_7m',
+                                    'm1_u_5m','m1_v_5m', 'm1_w_5m', 'm1_Ts_5m', 'm1_wdir_5m', 'm1_wspd_5m', 'm1_TKE_5m', 'm1_TI_U_5m', 'm1_TI_w_5m', 'm1_ls_w_5m', 'm1_ls_U_5m',             
+                                    'm1_u_4m','m1_v_4m', 'm1_w_4m', 'm1_Ts_4m', 'm1_wdir_4m', 'm1_wspd_4m', 'm1_TKE_4m', 'm1_TI_U_4m', 'm1_TI_w_4m', 'm1_ls_w_4m', 'm1_ls_U_4m',
+                                    'm1_u_3m','m1_v_3m', 'm1_w_3m', 'm1_Ts_3m', 'm1_wdir_3m', 'm1_wspd_3m', 'm1_TKE_3m', 'm1_TI_U_3m', 'm1_TI_w_3m', 'm1_ls_w_3m', 'm1_ls_U_3m',                 
+                                    
+                                    'm2_u_7m','m2_v_7m', 'm2_w_7m', 'm2_Ts_7m', 'm2_wdir_7m', 'm2_wspd_7m', 'm2_TKE_7m', 'm2_TI_U_7m', 'm2_TI_w_7m', 'm2_ls_w_7m', 'm2_ls_U_7m',
+                                    'm2_u_5m','m2_v_5m', 'm2_w_5m', 'm2_Ts_5m', 'm2_wdir_5m', 'm2_wspd_5m', 'm2_TKE_5m', 'm2_TI_U_5m', 'm2_TI_w_5m', 'm2_ls_w_5m', 'm2_ls_U_5m',
+                                    'm2_u_4m','m2_v_4m', 'm2_w_4m', 'm2_Ts_4m', 'm2_wdir_4m', 'm2_wspd_4m', 'm2_TKE_4m', 'm2_TI_U_4m', 'm2_TI_w_4m', 'm2_ls_w_4m', 'm2_ls_U_4m',
+                                    'm2_u_3m','m2_v_3m', 'm2_w_3m', 'm2_Ts_3m', 'm2_wdir_3m', 'm2_wspd_3m', 'm2_TKE_3m', 'm2_TI_U_3m', 'm2_TI_w_3m', 'm2_ls_w_3m', 'm2_ls_U_3m',
+                                    
+                                    'm3_u_7m','m3_v_7m', 'm3_w_7m', 'm3_Ts_7m', 'm3_wdir_7m', 'm3_wspd_7m', 'm3_TKE_7m', 'm3_TI_U_7m', 'm3_TI_w_7m', 'm3_ls_w_7m', 'm3_ls_U_7m',
+                                    'm3_u_5m','m3_v_5m', 'm3_w_5m', 'm3_Ts_5m', 'm3_wdir_5m', 'm3_wspd_5m', 'm3_TKE_5m', 'm3_TI_U_5m', 'm3_TI_w_5m', 'm3_ls_w_5m', 'm3_ls_U_5m',            
+                                    'm3_u_4m','m3_v_4m', 'm3_w_4m', 'm3_Ts_4m', 'm3_wdir_4m', 'm3_wspd_4m', 'm3_TKE_4m', 'm3_TI_U_4m', 'm3_TI_w_4m', 'm3_ls_w_4m', 'm3_ls_U_4m',
+                                    'm3_u_3m','m3_v_3m', 'm3_w_3m', 'm3_Ts_3m', 'm3_wdir_3m', 'm3_wspd_3m', 'm3_TKE_3m', 'm3_TI_U_3m', 'm3_TI_w_3m', 'm3_ls_w_3m', 'm3_ls_U_3m'  ]            
+                cols_to_add = [col for col in all_masts_cols if col not in masts.columns]
+                masts.loc[:, cols_to_add] = np.nan
+                masts = masts[all_masts_cols]
+                # masts 1min
+                all_masts_1min_cols = all_masts_cols + [    'm1_wspd_7m_max', 'm1_wspd_5m_max', 'm1_wspd_4m_max', 'm1_wspd_3m_max',
+                                                            'm1_wspd_7m_std', 'm1_wspd_5m_std', 'm1_wspd_4m_std', 'm1_wspd_3m_std',
+                                                             
+                                                            'm2_wspd_7m_max', 'm2_wspd_5m_max', 'm2_wspd_4m_max', 'm2_wspd_3m_max',
+                                                            'm2_wspd_7m_std', 'm2_wspd_5m_std', 'm2_wspd_4m_std', 'm2_wspd_3m_std', 
+                                                             
+                                                            'm3_wspd_7m_max', 'm3_wspd_5m_max', 'm3_wspd_4m_max', 'm3_wspd_3m_max', 
+                                                            'm3_wspd_7m_std', 'm3_wspd_5m_std', 'm3_wspd_4m_std', 'm3_wspd_3m_std' ]          
+                cols_to_add = [col for col in all_masts_1min_cols if col not in masts_1min.columns]
+                masts_1min.loc[:, cols_to_add] = np.nan
+                masts_1min = masts_1min[all_masts_1min_cols]  
+                
+            
+                              
             
             
             
@@ -315,17 +367,24 @@ for year in years:
    
             
                  
-            #%% Save data files as Parwuet
+            #%% Save data files as Parquet
 
                 
                 if save == 1:
                         
                     print ("Saving data ...")  
+                    
+                    if plot == 1:
+                        
+                       plt.savefig('Y:\Wind-data/Restricted/Projects/NSO/Daily_quicklooks' + 
+                                         '/Mast_winds_{}_{}_{:0>2}h_to_{}_{:0>2}h.png'
+                                         .format(res_freq, inflow.index[0].date(),inflow.index[0].hour, 
+                                                 inflow.index[-1].date(),inflow.index[-1].hour), dpi=200) 
+                       plt.close()
                         
                     
                     ## Parquet files 
                     # Define metadata and units
-                    save_path = publication_path + 'inflow_mast/'
                     inflow_units = {'u_' :'m/s',
                                     'v_' :'m/s',
                                     'w_' :'m/s', 
@@ -345,6 +404,7 @@ for year in years:
                     inflow_metadata = {'creation_date':pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"),
                                 'author':'Ulrike Egerer',
                                 'units': inflow_units}
+                    save_path = publication_path + 'inflow_mast_20Hz/'
                     complete_path = create_file_structure(file_path = save_path, resolution = '20Hz', year=year, month=month, day=day)
                     inflow.to_parquet(complete_path + 
                                       '/Inflow_Mast_20Hz_{}_{:0>2}h_to_{}_{:0>2}h.parquet'
@@ -352,6 +412,7 @@ for year in years:
                                               inflow.index[-1].date(),inflow.index[-1].hour), 
                                       #metadata=inflow_metadata
                                       )
+                    save_path = publication_path + 'inflow_mast_1min/'
                     complete_path = create_file_structure(file_path = save_path, resolution = res_freq, year=year, month=month, day=day)
                     inflow_1min.to_parquet(complete_path + 
                                       '/Inflow_Mast_{}_{}_{:0>2}h_to_{}_{:0>2}h.parquet'
@@ -360,17 +421,10 @@ for year in years:
                                       # metadata=inflow_metadata
                                       ) 
                     
-                    if plot == 1:
-                        
-                       plt.savefig('Y:\Wind-data/Restricted/Projects/NSO/Daily_quicklooks' + 
-                                         '/Mast_winds_{}_{}_{:0>2}h_to_{}_{:0>2}h.png'
-                                         .format(res_freq, inflow.index[0].date(),inflow.index[0].hour, 
-                                                 inflow.index[-1].date(),inflow.index[-1].hour), dpi=200) 
-                       plt.close()
+
                        
                     if len(masts) !=0: 
                     
-                        save_path = publication_path + 'wake_masts/'
                         wake_units = {  'u_' :'m/s',
                                         'v_' :'m/s',
                                         'w_' :'m/s', 
@@ -383,6 +437,7 @@ for year in years:
                         wake_metadata = {'creation_date':pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S"),
                                     'author':'Ulrike Egerer',
                                     'units': wake_units}
+                        save_path = publication_path + 'wake_masts_20Hz/'
                         complete_path = create_file_structure(file_path = save_path, resolution = '20Hz', year=year, month=month, day=day)
                         masts.to_parquet(complete_path + 
                                           '/Wake_Masts_20Hz_{}_{:0>2}h_to_{}_{:0>2}h.parquet'
@@ -390,6 +445,7 @@ for year in years:
                                                   masts.index[-1].date(),masts.index[-1].hour), 
                                           # metadata=wake_metadata
                                           )
+                        save_path = publication_path + 'wake_masts_1min/'
                         complete_path = create_file_structure(file_path = save_path, resolution = res_freq, year=year, month=month, day=day)
                         masts_1min.to_parquet(complete_path + 
                                           '/Wake_Masts_{}_{}_{:0>2}h_to_{}_{:0>2}h.parquet'
@@ -403,12 +459,3 @@ for year in years:
     
                 print ("ok")            
             
-            
-             
-
-       
-            
-           
-            
-           
-    
