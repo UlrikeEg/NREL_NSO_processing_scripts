@@ -241,11 +241,11 @@ def get_tracker_angle_from_aimpt(x,z):
 
 def create_file_structure(file_path, resolution, year, month, day):
     try:
-         # Create the directory structure
+         # Create the directory structure (resolution not needed anymore)
         if type(month)==str:
-            directory = os.path.join(file_path, 'resolution=' + resolution + "/year="+year+"/month="+month+"/day="+day)
+            directory = os.path.join(file_path, "year="+year+"/month="+month+"/day="+day)
         else:
-            directory = os.path.join(file_path, 'resolution=' + resolution + f"/year={year:04d}/month={month:02d}/day={day:02d}")
+            directory = os.path.join(file_path, f"year={year:04d}/month={month:02d}/day={day:02d}")
 
         # If the directory already exists, delete all files within it
         if os.path.exists(directory):
