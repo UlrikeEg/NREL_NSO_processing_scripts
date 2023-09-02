@@ -35,18 +35,18 @@ from Functions_loads import *
 
 # select dates
 years   =  np.arange(2022,2024)   
-months  =  [11,12,1,2,3,4,5,6]  
+months  =  [11,12,1,2,3,4,5,6,7]  
 days    =  np.arange(1,32)  
 
-# years   =  [2022] #
-# months  =  [11] # 
-# days    =  [30] # 
+years   =  [2023] #
+months  =  [4] # 
+days    =  [7] # np.arange(12,32)   # 
 
 
 # path to files
 mast_path = 'Y:\Wind-data/Restricted/Projects/NSO/Processed_data/Met_masts_v0/'   
 loads_path = 'Y:\Wind-data/Restricted/Projects/NSO/Processed_data/Loads_v2/' 
-save_path = 'Y:\Wind-data/Restricted/Projects/NSO/Data_publish/NSO/loads/' 
+save_path = 'Y:\Wind-data/Restricted/Projects/NSO/Data_publish/NSO/' 
 
 
 # Define
@@ -54,7 +54,7 @@ resolution_loads = '20Hz'
 units = unit_dict
 
 
-save = 1
+save = 0
 plot = 1
 
 
@@ -232,8 +232,9 @@ for year in years:
                             'author':'Ulrike Egerer',
                             'units': units}
                 
-                # Create folder structure and save data
-                complete_path = create_file_structure(file_path = save_path, resolution = '20Hz', year=loads.index[0].year, month=loads.index[0].month, day=loads.index[0].day)
+                # Create folder stucture and save data
+                path = save_path+'loads_20Hz/'
+                complete_path = create_file_structure(file_path = path, resolution = '20Hz', year=loads.index[0].year, month=loads.index[0].month, day=loads.index[0].day)
                 loads.to_parquet(complete_path +
                                   '/Loads_20Hz_{}_{:0>2}h_to_{}_{:0>2}h.parquet'
                                   .format(loads.index[0].date(),loads.index[0].hour, 
@@ -241,7 +242,8 @@ for year in years:
                                  # metadata=loads_metadata
                                   )
                 
-                complete_path = create_file_structure(file_path = save_path, resolution = '1min', year=loads.index[0].year, month=loads.index[0].month, day=loads.index[0].day)
+                path = save_path+'loads_1min/'
+                complete_path = create_file_structure(file_path = path, resolution = '1min', year=loads.index[0].year, month=loads.index[0].month, day=loads.index[0].day)
                 loads_1min.to_parquet(complete_path +
                                   '/Loads_1min_{}_{:0>2}h_to_{}_{:0>2}h.parquet'
                                   .format(loads.index[0].date(),loads.index[0].hour, 
@@ -264,28 +266,5 @@ for year in years:
 
             print ("ok")            
             
-            
-            
-            
-            
-            
-            
-            
-  
-
-
-
-
-
-
-
-   
-    
-   
-    
-  
-    
-   
-    
             
             
