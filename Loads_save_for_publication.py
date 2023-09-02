@@ -38,9 +38,9 @@ years   =  np.arange(2022,2024)
 months  =  [11,12,1,2,3,4,5,6,7]  
 days    =  np.arange(1,32)  
 
-years   =  [2023] #
-months  =  [4] # 
-days    =  [7] # np.arange(12,32)   # 
+# years   =  [2023] #
+# months  =  [4] # 
+# days    =  [7] # 
 
 
 # path to files
@@ -54,7 +54,7 @@ resolution_loads = '20Hz'
 units = unit_dict
 
 
-save = 0
+save = 1
 plot = 1
 
 
