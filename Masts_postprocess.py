@@ -32,7 +32,7 @@ days    =  np.arange(1,32)
 # days    =  [30] # 
 
 start_processing = pd.to_datetime('2021-01-01 00:00:00')
-end_processing = pd.to_datetime('2024-01-01 00:00:00')
+
 
 fs = 20 # [Hz], sampling frequency
 
@@ -42,7 +42,7 @@ mast1_path = 'Y:\Wind-data/Restricted/Projects/NSO/Met_Mast_1_Sonics/'
 mast2_path = 'Y:\Wind-data/Restricted/Projects/NSO/Met_Mast_2_Sonics/'
 mast3_path = 'Y:\Wind-data/Restricted/Projects/NSO/Met_Mast_3_Sonics/'
 
-path_save = 'Y:\Wind-data/Restricted/Projects/NSO/Processed_data/Met_masts_v0/'
+path_save = './data/' # 'Y:\Wind-data/Restricted/Projects/NSO/Processed_data/Met_masts_v1/'
             
             
 
@@ -74,10 +74,9 @@ for year in years:
             print (year, month, day)   
             
             try:
-                if pd.to_datetime(year+ month+ day) < start_processing: 
+                if pd.to_datetime(year+ month+ day) <= start_processing: 
                     continue
-                if pd.to_datetime(year+ month+ day) > end_processing: 
-                    continue
+
             except:
                 pass
             
@@ -235,11 +234,6 @@ for year in years:
                 for channel in inflow.columns:
                     inflow[channel] = inflow[channel].where( np.abs(inflow[channel] - inflow[channel].rolling(filter_window, center=True, min_periods=1).median() ) 
                                                             <= (5* inflow[channel].rolling(filter_window, center=True, min_periods=1).std() ) , np.nan)            
-
-                # remove duplicate values
-                for column in [col for col in inflow.columns if '_ax_' in col]:
-                    index=inflow[column].diff()== 0
-                    inflow[column].loc[index]=np.nan
                 
                 ## wind speed and direction
                 inflow = calc_wind(inflow)
@@ -345,11 +339,6 @@ for year in years:
                 for height_col in [col for col in masts.columns if 'V_ax_' in col]:    # loop over every mast height
                     masts.loc[masts[height_col] == 33] = np.nan         
                     
-                 
-                # remove duplicate values
-                for column in [col for col in masts.columns if '_ax_' in col]:
-                    index=masts[column].diff()== 0
-                    masts[column].loc[index]=np.nan
                 
                 ## filter outliers (remove data that exceeds 5*std_dev in a 60s window)
                 for channel in masts.columns:
