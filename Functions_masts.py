@@ -1,3 +1,5 @@
+"""Copyright (c) 2023 Alliance for Sustainable Energy, LLC"""
+
 import numpy as np
 from numpy import cos,sin
 import pandas as pd
